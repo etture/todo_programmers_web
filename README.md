@@ -1,7 +1,7 @@
 # 프로그래머스 썸머코딩 2019 2차 개발과제 
 ## 이진우 (etture@gmail.com)
 ## TODO list 만들기 -- 프론트엔드
-## 실행 URL: [https://todo-programmers-web.firebaseapp.com](링크)
+## 실행 URL: https://todo-programmers-web.firebaseapp.com
 
 ### 개발 스택
 - React.js
