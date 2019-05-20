@@ -1,5 +1,6 @@
 export interface ITodoItem {
 	id: number,
+	userid: number,
 	title: string,
 	content: string,
 	createdAt: string,
@@ -7,19 +8,9 @@ export interface ITodoItem {
 	priority: number,
 	deadline?: string
 };
-
-export interface ITodoStoreItem {
-	id: number,
-	title: string,
-	content: string,
-	createdAt: string,
-	completed: boolean,
-	priority: number,
-	deadline?: string
-};
-
 
 export interface IPreDBTodoItem {
+	userid: number,
 	title: string,
 	content: string,
 	priority: number,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { ITodoStore } from '../../stores/TodoStore';
-import { ITodoItem, IPreDBTodoItem } from '../../utils/definitions';
+import { IPreDBTodoItem } from '../../utils/definitions';
 import log from '../../utils/devLog';
 import Datetime from 'react-datetime';
 import moment, { Moment } from 'moment';
@@ -53,6 +53,7 @@ class NewTodoModal extends Component<INewTodoModalProps, INewTodoModalState> {
 			});
 		} else {
 			const preDBTodoItem: IPreDBTodoItem = {
+				userid: this.props.todoStore!.userid,
 				title: this.state.title,
 				content: this.state.content,
 				priority: this.state.priority,

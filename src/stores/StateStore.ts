@@ -17,6 +17,7 @@ export interface IStateStore {
 export class StateStore implements IStateStore {
 	@observable editTodoModalItem: ITodoItem = {
 		id: 0,
+		userid: 0,
 		title: '',
 		content: '',
 		createdAt: '',
@@ -35,6 +36,7 @@ export class StateStore implements IStateStore {
 	resetEditTodoModalItem = () => {
 		this.editTodoModalItem = {
 			id: 0,
+			userid: 0,
 			title: '',
 			content: '',
 			createdAt: '',

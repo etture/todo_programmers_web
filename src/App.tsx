@@ -1,25 +1,42 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, withRouter, RouteComponentProps } from 'react-router-dom';
 import './App.css';
 import { extendObservable } from 'mobx';
 import TodoPage from './views/pages/TodoPage';
+import AuthPage from './views/pages/AuthPage';
+import { inject, observer } from 'mobx-react';
+import { ITodoStore } from './stores/TodoStore';
 
-interface IAppProps { }
+interface IAppProps extends RouteComponentProps<{}> {
+	todoStore?: ITodoStore
+}
 interface IAppState { }
 
+@inject('todoStore')
+@observer
 class App extends Component<IAppProps, IAppState> {
 	constructor(props: IAppProps) {
 		super(props);
 		extendObservable(this, {});
 	}
 
+	componentDidMount() {
+		if (this.props.todoStore!.userAuthorized) {
+			this.props.history.push('/todo');
+		} else {
+			this.props.history.push('/auth');
+		}
+	}
+
 	render() {
 		return (
 			<Switch>
-				<Route path="/" component={TodoPage}/>
+				
+				<Route path="/auth" component={AuthPage} />
+				<Route path="/todo" component={TodoPage} />
 			</Switch>
 		);
 	}
 }
 
-export default App;
+export default withRouter(App);
