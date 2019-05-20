@@ -12,7 +12,7 @@ class TodoPage extends Component<ITodoPageProps, ITodoPageState> {
 	render() {
 		return (
 			<div className="container">
-				<h1>Todo Page</h1>
+				<h1>Todo</h1>
 				<TodoList />
 			</div>
 		);

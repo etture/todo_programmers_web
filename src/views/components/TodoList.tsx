@@ -1,27 +1,33 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { axiosInstance } from '../../utils/axiosSettings';
+import { observable, action } from 'mobx';
+import arraySort from 'array-sort';
+import moment from 'moment';
 import { ITodoStore } from '../../stores/TodoStore';
-import { ITodoItem, ITodoListResponse } from '../../utils/definitions';
+import { ITodoItem } from '../../utils/definitions';
 import TodoListItem from './TodoIListItem';
 import log from '../../utils/devLog';
 import './TodoList.css';
 import NewTodoModal from './NewTodoModal';
+import EditTodoModal from './EditTodoModal';
+import { IStateStore } from '../../stores/StateStore';
 
 interface ITodoListProps {
-	todoStore?: ITodoStore
+	todoStore?: ITodoStore,
+	stateStore?: IStateStore
 }
 interface ITodoListState {
-	modalShown: boolean
- }
+	newTodoModalShown: boolean,
+}
 
 @inject('todoStore')
+@inject('stateStore')
 @observer
 class TodoList extends Component<ITodoListProps, ITodoListState> {
 	constructor(props: ITodoListProps) {
 		super(props);
 		this.state = {
-			modalShown: false
+			newTodoModalShown: false
 		};
 	}
 
@@ -37,11 +43,26 @@ class TodoList extends Component<ITodoListProps, ITodoListState> {
 	renderUncompletedTodoList = (): JSX.Element[] => {
 		let todoList: Array<JSX.Element> = [];
 		const uncompletedTodoList = this.props.todoStore!.todoList.filter(todo => !todo.completed);
+		
+		// TODO 리스트는 우선순위, 마김기한, 만든 시간 순으로 정렬
+		arraySort(uncompletedTodoList, ['priority', 'deadline', 'createdAt'], { reverse: false });
 		uncompletedTodoList.forEach(todo => {
+			let deadlinePassed = false;
+			if (todo.deadline && moment().toISOString() >= todo.deadline) {
+				deadlinePassed = true;
+			}
+
+			let itemStyle = {};
+			if (deadlinePassed) {
+				itemStyle = { backgroundColor: '#ffcccc' };
+			}
+
 			todoList.push(
-				<li key={`${todo.id}`} className="list-group-item todo-item" >
-					<TodoListItem todoItem={todo} />
-				</li>
+				<div key={`${todo.id}`} >
+					<li className="list-group-item todo-item" style={itemStyle}>
+						<TodoListItem todoItem={todo} deadlinePassed={deadlinePassed} />
+					</li>
+				</div>
 			)
 		});
 		return todoList;
@@ -50,22 +71,32 @@ class TodoList extends Component<ITodoListProps, ITodoListState> {
 	renderCompletedTodoList = (): JSX.Element[] => {
 		let todoList: Array<JSX.Element> = [];
 		const completedTodoList = this.props.todoStore!.todoList.filter(todo => todo.completed);
+
+		// TODO 리스트는 우선순위, 마김기한, 만든 시간 순으로 정렬
+		arraySort(completedTodoList, ['priority', 'deadline', 'createdAt'], { reverse: false });
 		completedTodoList.forEach(todo => {
 			todoList.push(
 				<li key={`${todo.id}`} className="list-group-item todo-item" >
-					<TodoListItem todoItem={todo} />
+					<TodoListItem todoItem={todo} deadlinePassed={false} />
 				</li>
 			)
 		});
 		return todoList;
 	}
 
-	handleShow = () => {
-		this.setState({modalShown: true});
+	handleNewTodoModalShow = () => {
+		this.setState({ newTodoModalShown: true });
+		log('new modal show, ', this.state);
 	}
 
-	handleClose = () => {
-		this.setState({modalShown: false});
+	handleNewTodoModalClose = () => {
+		this.setState({ newTodoModalShown: false });
+		log('new modal close, ', this.state);
+	}
+
+	handleEditTodoModalClose = () => {
+		this.props.stateStore!.setEditTodoModalShown();
+		log('edit modal close, ', this.state);
 	}
 
 	render() {
@@ -79,7 +110,7 @@ class TodoList extends Component<ITodoListProps, ITodoListState> {
 								<button
 									type="button"
 									className="btn btn-primary mr-3"
-									onClick={() => this.handleShow()}
+									onClick={() => this.handleNewTodoModalShow()}
 								>
 									할 일 추가
 								</button>
@@ -100,7 +131,8 @@ class TodoList extends Component<ITodoListProps, ITodoListState> {
 						{this.renderCompletedTodoList()}
 					</div>
 				</ul>
-				<NewTodoModal show={this.state.modalShown} handleClose={() => this.handleClose()} />
+				<NewTodoModal show={this.state.newTodoModalShown} handleClose={() => this.handleNewTodoModalClose()} />
+				<EditTodoModal show={this.props.stateStore!.editTodoModalShown} handleClose={this.handleEditTodoModalClose} />
 			</div>
 		);
 	}

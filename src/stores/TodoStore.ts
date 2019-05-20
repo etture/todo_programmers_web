@@ -9,7 +9,8 @@ export interface ITodoStore {
 	fetchAllTodos(): void,
 	deleteTodo(todoId: number): void,
 	completeTodo(todoItem: ITodoItem, completed: boolean): void,
-	createNewTodo(preDBTodoItem: IPreDBTodoItem): void
+	createNewTodo(preDBTodoItem: IPreDBTodoItem): void,
+	editTodo(todoItem: ITodoItem): void
 }
 
 export class TodoStore implements ITodoStore {
@@ -18,6 +19,7 @@ export class TodoStore implements ITodoStore {
 	@action
 	setTodoList = (list: ITodoItem[]) => {
 		this.todoList = list;
+		log('TodoStore setTodoList, todoList: ', JSON.stringify(this.todoList));
 	}
 
 	@action
@@ -47,7 +49,7 @@ export class TodoStore implements ITodoStore {
 
 	@action
 	completeTodo = (todoItem: ITodoItem, completed: boolean) => {
-		const newTodoItem = {...todoItem, completed};
+		const newTodoItem = { ...todoItem, completed };
 		log('newTodoItem: ', newTodoItem);
 		axiosInstance.put('/edit/completed', newTodoItem)
 			.then(() => {
@@ -61,11 +63,22 @@ export class TodoStore implements ITodoStore {
 	@action
 	createNewTodo = (preDBTodoItem: IPreDBTodoItem) => {
 		axiosInstance.post('/new', preDBTodoItem)
-		.then(() => {
-			this.fetchAllTodos();
-		})
-		.catch(error => {
-			log('createNewTodo error: ', error);
-		});
+			.then(() => {
+				this.fetchAllTodos();
+			})
+			.catch(error => {
+				log('createNewTodo error: ', error);
+			});
+	}
+
+	@action
+	editTodo = (todoItem: ITodoItem) => {
+		axiosInstance.put('/edit/content', todoItem)
+			.then(() => {
+				this.fetchAllTodos();
+			})
+			.catch(error => {
+				log('editTodo error: ', error);
+			});
 	}
 }

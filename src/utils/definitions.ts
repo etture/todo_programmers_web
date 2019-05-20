@@ -4,7 +4,17 @@ export interface ITodoItem {
 	content: string,
 	createdAt: string,
 	completed: boolean,
-	priority?: number,
+	priority: number,
+	deadline?: string
+};
+
+export interface ITodoStoreItem {
+	id: number,
+	title: string,
+	content: string,
+	createdAt: string,
+	completed: boolean,
+	priority: number,
 	deadline?: string
 };
 
@@ -12,7 +22,7 @@ export interface ITodoItem {
 export interface IPreDBTodoItem {
 	title: string,
 	content: string,
-	priority?: number,
+	priority: number,
 	deadline?: string
 };
 
