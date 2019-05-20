@@ -18,15 +18,16 @@ class TodoPage extends Component<ITodoPageProps, ITodoPageState> {
 
 	signout = () => {
 		this.props.todoStore!.signout();
-		this.props.history.push('/auth');
+		localStorage.clear();
+		this.props.history.push('/auth/signin');
 	}
 
 	render() {
 		return (
-			<div className="container">
+			<div className="container mt-3">
 				<div className="d-flex flex-row justify-content-between">
-					<h1>Todo</h1>
-					<button className="d-flex flex-wrap btn btn-outline-primary py-0"
+					<h3>Todo</h3>
+					<button className="d-flex flex-wrap btn btn-outline-primary"
 						onClick={() => this.signout()}
 					>로그아웃</button>
 				</div>

@@ -18,20 +18,22 @@ class App extends Component<IAppProps, IAppState> {
 	constructor(props: IAppProps) {
 		super(props);
 		extendObservable(this, {});
+		if(localStorage.getItem('todo_userid')) {
+			this.props.todoStore!.setUserid(Number(localStorage.getItem('todo_userid')));
+		}
 	}
 
 	componentDidMount() {
 		if (this.props.todoStore!.userAuthorized) {
 			this.props.history.push('/todo');
 		} else {
-			this.props.history.push('/auth');
+			this.props.history.push('/auth/signin');
 		}
 	}
 
 	render() {
 		return (
 			<Switch>
-				
 				<Route path="/auth" component={AuthPage} />
 				<Route path="/todo" component={TodoPage} />
 			</Switch>

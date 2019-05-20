@@ -3,7 +3,9 @@ import { axiosInstance } from '../../utils/axiosSettings';
 import log from '../../utils/devLog';
 import { inject, observer } from 'mobx-react';
 import { ITodoStore } from '../../stores/TodoStore';
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { withRouter, RouteComponentProps, Switch, Route } from 'react-router-dom';
+import SigninPage from './SigninPage';
+import SignupPage from './SignupPage';
 
 interface IAuthPageProps extends RouteComponentProps<{}> {
 	todoStore?: ITodoStore
@@ -24,57 +26,16 @@ class AuthPage extends Component<IAuthPageProps, IAuthPageState> {
 		};
 	}
 
-	handleNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({ nickname: e.target.value });
-	}
-
-	handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({ password: e.target.value });
-	}
-
-	handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		axiosInstance.post('/auth/signin', { nickname: this.state.nickname, password: this.state.password })
-			.then((result) => {
-				log('signin result: ', result.data.success, result.data.userId);
-				if (result.data.success) {
-					this.props.todoStore!.setUserid(result.data.userId);
-					this.props.history.push('/todo');
-				}
-			})
-			.catch(error => {
-				log('signin error: ', error);
-			});
+	componentDidMount() {
+		// this.props.history.push('/auth/signin');
 	}
 
 	render() {
 		return (
-			<div className="container mt-5 col-6">
-				<div className="card">
-					<div className="card-header">
-						<h4 className="d-flex align-content-center">TODO 로그인</h4>
-					</div>
-					<div className="card-body">
-						<form onSubmit={(e: React.FormEvent<HTMLFormElement>) => this.handleSubmit(e)}>
-							<div className="form-group">
-								<label htmlFor="nickname">닉네임</label>
-								<input id="nickname" className="form-control"
-									type="text" placeholder="닉네임"
-									onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.handleNickname(e)}
-								/>
-							</div>
-							<div className="form-group">
-								<label htmlFor="pwd">비밀번호</label>
-								<input id="pwd" className="form-control"
-									type="password" placeholder="비밀번호"
-									onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.handlePassword(e)}
-								/>
-							</div>
-							<button type="submit" className="btn btn-primary">로그인</button>
-						</form>
-					</div>
-				</div>
-			</div>
+			<Switch>
+				<Route path='/auth/signin' component={SigninPage} />
+				<Route path='/auth/signup' component={SignupPage} />
+			</Switch>
 		);
 	}
 }
