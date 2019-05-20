@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { ITodoStore } from '../../stores/TodoStore';
+import { IStateStore } from '../../stores/StateStore';
 import { ITodoItem, IPreDBTodoItem } from '../../utils/definitions';
 import log from '../../utils/devLog';
 import Datetime from 'react-datetime';
@@ -9,7 +10,6 @@ import { Modal } from 'react-bootstrap';
 
 import 'react-datetime/css/react-datetime.css';
 import 'moment/locale/ko';
-import { IStateStore } from '../../stores/StateStore';
 
 interface IEditTodoModalProps {
 	todoStore?: ITodoStore,
@@ -33,16 +33,6 @@ interface IEditTodoModalState {
 class EditTodoModal extends Component<IEditTodoModalProps, IEditTodoModalState> {
 	constructor(props: IEditTodoModalProps) {
 		super(props);
-		// const { todoItem } = this.props;
-		// this.state = {
-		// 	title: todoItem.title,
-		// 	content: todoItem.content,
-		// 	titleEmpty: false,
-		// 	contentEmpty: false,
-		// 	editBtnClicked: false,
-		// 	priority: todoItem.priority,
-		// 	deadline: todoItem.deadline
-		// }
 		const { editTodoModalItem } = this.props.stateStore!
 		this.state = {
 			title: editTodoModalItem.title,
@@ -72,6 +62,7 @@ class EditTodoModal extends Component<IEditTodoModalProps, IEditTodoModalState> 
 				title: editTodoModalItem.title, content: editTodoModalItem.content,
 				priority: editTodoModalItem.priority, deadline: editTodoModalItem.deadline
 			}
+			log('editedTodoItem: ', JSON.stringify(editedTodoItem));
 			this.props.todoStore!.editTodo(editedTodoItem);
 			this.props.handleClose();
 		}
@@ -98,25 +89,21 @@ class EditTodoModal extends Component<IEditTodoModalProps, IEditTodoModalState> 
 	}
 
 	handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-		// this.setState({ title: e.target.value });
 		this.props.stateStore!.handleTitle(e.target.value);
 	}
 
 	handleContent = (e: React.ChangeEvent<HTMLInputElement>) => {
-		// this.setState({ content: e.target.value });
 		this.props.stateStore!.handleContent(e.target.value);
 	}
 
 	handlePriority = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		log('priority: ', e.currentTarget.value);
-		// this.setState({ priority: Number(e.currentTarget.value) });
 		this.props.stateStore!.handlePriority(Number(e.currentTarget.value));
 	}
 
 	handleDeadline = (datetime: Moment | string) => {
 		const deadline = moment(datetime.valueOf());
-		log('deadline: ', datetime.toString(), deadline.month(), deadline.date(), deadline.toISOString());
-		// this.setState({ deadline: deadline.toISOString() });
+		deadline.add(9, "hours");
 		this.props.stateStore!.handleDeadline(deadline.toISOString());
 	}
 
@@ -169,8 +156,9 @@ class EditTodoModal extends Component<IEditTodoModalProps, IEditTodoModalState> 
 							<div className="form-group">
 								<label htmlFor="deadlinePicker">마감 기한 <small>(선택)</small></label>
 								<Datetime
-									value={editTodoModalItem.deadline}
-									onChange={(datetime) => this.handleDeadline(datetime)} locale="ko" />
+									defaultValue={moment(editTodoModalItem.deadline)}
+									onChange={(datetime) => this.handleDeadline(datetime)}
+									/>
 							</div>
 						</div>
 						<div className="modal-footer">
