@@ -36,7 +36,7 @@ class NewTodoModal extends Component<INewTodoModalProps, INewTodoModalState> {
 			titleEmpty: false,
 			contentEmpty: false,
 			addBtnClicked: false,
-			priority: 0,
+			priority: 3,
 			deadline: undefined
 		}
 	}
@@ -110,7 +110,7 @@ class NewTodoModal extends Component<INewTodoModalProps, INewTodoModalState> {
 			titleEmpty: false,
 			contentEmpty: false,
 			addBtnClicked: false,
-			priority: 0,
+			priority: 3,
 			deadline: undefined
 		});
 	}
