@@ -105,13 +105,13 @@ class TodoListItem extends Component<ITodoListItemProps, ITodoListItemState> {
 		log('printPriority: ', priority);
 		switch (priority) {
 			case 3:
-				return <span style={{ color: 'blue' }}>없음</span>;
+				return <span style={{ color: 'blue', fontWeight: 'bold' }}><big>없음</big></span>;
 			case 2:
-				return <span style={{ color: 'green' }}>낮음</span>;
+				return <span style={{ color: 'green', fontWeight: 'bold' }}><big>낮음</big></span>;
 			case 1:
-				return <span style={{ color: 'chocolate' }}>중간</span>;
+				return <span style={{ color: 'chocolate', fontWeight: 'bold' }}><big>중간</big></span>;
 			case 0:
-				return <span style={{ color: 'red' }}>높음</span>;
+				return <span style={{ color: 'red', fontWeight: 'bold' }}><big>높음</big></span>;
 		}
 	}
 
