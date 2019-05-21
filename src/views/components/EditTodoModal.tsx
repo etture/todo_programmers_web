@@ -24,7 +24,8 @@ interface IEditTodoModalState {
 	contentEmpty: boolean,
 	editBtnClicked: boolean,
 	priority: number,
-	deadline?: string
+	deadline?: string,
+	deadlineEdited: boolean
 }
 
 @inject('todoStore')
@@ -41,7 +42,8 @@ class EditTodoModal extends Component<IEditTodoModalProps, IEditTodoModalState> 
 			contentEmpty: false,
 			editBtnClicked: false,
 			priority: editTodoModalItem.priority,
-			deadline: editTodoModalItem.deadline
+			deadline: editTodoModalItem.deadline,
+			deadlineEdited: false
 		}
 	}
 
@@ -62,8 +64,8 @@ class EditTodoModal extends Component<IEditTodoModalProps, IEditTodoModalState> 
 				title: editTodoModalItem.title, content: editTodoModalItem.content,
 				priority: editTodoModalItem.priority, deadline: editTodoModalItem.deadline
 			}
-			log('editedTodoItem: ', JSON.stringify(editedTodoItem));
-			this.props.todoStore!.editTodo(editedTodoItem);
+			log(`editedTodoItem: ${JSON.stringify(editedTodoItem)}, deadlineEdited: ${this.state.deadlineEdited}`);
+			this.props.todoStore!.editTodo(editedTodoItem, this.state.deadlineEdited);
 			this.props.handleClose();
 		}
 	}
@@ -102,9 +104,14 @@ class EditTodoModal extends Component<IEditTodoModalProps, IEditTodoModalState> 
 	}
 
 	handleDeadline = (datetime: Moment | string) => {
-		const deadline = moment(datetime.valueOf());
-		deadline.add(9, "hours");
-		this.props.stateStore!.handleDeadline(deadline.toISOString());
+		const datetimeStr: string = datetime.toString();
+		const strList: string[] = datetimeStr.split(' ');
+		strList.pop();
+		const deadline = moment(strList.join(' ')).format('YYYY-MM-DD HH:mm:SS').toString();
+		const deadlineISOString = deadline.split(' ').join('T').concat('.000');
+		this.setState({ deadlineEdited: true });
+		log(`handleDeadline() -> moment deadline: ${deadline}, dateTimeStr: ${datetimeStr}, deadlineISOString: ${deadlineISOString}`);
+		this.props.stateStore!.handleDeadline(deadlineISOString);
 	}
 
 	handleClose = () => {
@@ -158,7 +165,8 @@ class EditTodoModal extends Component<IEditTodoModalProps, IEditTodoModalState> 
 								<Datetime
 									defaultValue={moment(editTodoModalItem.deadline)}
 									onChange={(datetime) => this.handleDeadline(datetime)}
-									/>
+									utc={false}
+								/>
 							</div>
 						</div>
 						<div className="modal-footer">

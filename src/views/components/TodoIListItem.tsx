@@ -84,7 +84,7 @@ class TodoListItem extends Component<ITodoListItemProps, ITodoListItemState> {
 	conditionalRenderDeadline = (): JSX.Element => {
 		const { deadlinePassed, todoItem } = this.props;
 		const deadline = moment(todoItem.deadline!);
-		log('deadline: ', deadline);
+		log('TodoListItem deadline: ', JSON.stringify(deadline));
 		if (deadlinePassed) {
 			return (
 				<div className="d-flex justify-content-start">
@@ -130,7 +130,8 @@ class TodoListItem extends Component<ITodoListItemProps, ITodoListItemState> {
 	render() {
 		const { todoItem } = this.props;
 		log('todoItem.createdAt:, ', todoItem.createdAt);
-		const createdAt = moment(todoItem.createdAt).add(9, 'hours');
+		// const createdAt = moment(todoItem.createdAt).add(9, 'hours');
+		const createdAt = moment(todoItem.createdAt);
 		return (
 			<div className="container" >
 				<div className="d-flex flex-row justify-content-between">
