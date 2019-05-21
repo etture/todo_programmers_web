@@ -26,7 +26,7 @@ class TodoPage extends Component<ITodoPageProps, ITodoPageState> {
 		return (
 			<div className="container mt-3">
 				<div className="d-flex flex-row justify-content-between">
-					<h3>Todo</h3>
+					<h3>Todo (user: {this.props.todoStore!.nickname})</h3>
 					<button className="d-flex flex-wrap btn btn-outline-primary"
 						onClick={() => this.signout()}
 					>로그아웃</button>

@@ -18,8 +18,8 @@ class App extends Component<IAppProps, IAppState> {
 	constructor(props: IAppProps) {
 		super(props);
 		extendObservable(this, {});
-		if(localStorage.getItem('todo_userid')) {
-			this.props.todoStore!.setUserid(Number(localStorage.getItem('todo_userid')));
+		if(localStorage.getItem('todo_userid') && localStorage.getItem('todo_nickname')) {
+			this.props.todoStore!.setUser(Number(localStorage.getItem('todo_userid')), localStorage.getItem('todo_nickname')!);
 		}
 	}
 

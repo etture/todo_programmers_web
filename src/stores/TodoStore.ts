@@ -6,7 +6,8 @@ import moment from 'moment';
 
 export interface ITodoStore {
 	userid: number,
-	setUserid(uid: number): void,
+	nickname: string,
+	setUser(uid: number, nick: string): void,
 	signout(): void,
 	userAuthorized: boolean,
 	todoList: Array<ITodoItem>,
@@ -20,15 +21,18 @@ export interface ITodoStore {
 
 export class TodoStore implements ITodoStore {
 	@observable userid = 0;
+	@observable nickname = '';
 
 	@action
-	setUserid = (uid: number) => {
+	setUser = (uid: number, nick: string) => {
 		this.userid = uid;
+		this.nickname = nick;
 	}
 
 	@action
 	signout = () => {
 		this.userid = 0;
+		this.nickname = '';
 	}
 
 	@computed
