@@ -33,6 +33,8 @@ export class TodoStore implements ITodoStore {
 	signout = () => {
 		this.userid = 0;
 		this.nickname = '';
+		this.todoList = Array<ITodoItem>();
+		this.pendingReqCount = 0;
 	}
 
 	@computed
@@ -41,7 +43,6 @@ export class TodoStore implements ITodoStore {
 	}
 
 	@observable todoList = Array<ITodoItem>();
-	count = 0;
 	pendingReqCount = 0;
 
 	@action
@@ -52,8 +53,6 @@ export class TodoStore implements ITodoStore {
 
 	@action
 	fetchAllTodos = () => {
-		this.count++;
-		log('fetchAllTodos start, cnt: ', this.count);
 		log(`moment().format(): ${moment().format()}, moment().format('YYYY-MM-DD HH:mm:SS'): ${moment().format('YYYY-MM-DD HH:mm:SS')}`);
 		// 모든 TODO 항목들 가져오기
 		axiosInstance.post('/get/all', { userid: this.userid })
@@ -61,7 +60,6 @@ export class TodoStore implements ITodoStore {
 				const todoListRes: ITodoListResponse = todos.data;
 				// Store에 TODO 항목들 저장
 				this.setTodoList(todoListRes.todoList);
-				log('fetchAllTodos end, cnt: ', this.count);
 			})
 			.catch(error => {
 				log('fetchAllTodos error: ', error);
@@ -70,21 +68,12 @@ export class TodoStore implements ITodoStore {
 
 	@action
 	fetchAllTodosInternal = () => {
-		this.count++;
-		log(`fetchAllTodos start, cnt: ${this.count}, pendingReqCount: ${this.pendingReqCount}`);
-		log(`moment().format(): ${moment().format()}, moment().format('YYYY-MM-DD HH:mm:SS'): ${moment().format('YYYY-MM-DD HH:mm:SS')}`);
-		log(`TEST-> moment('2019-05-21 11:00:00').format('YYYY-MM-DD HH:mm:SS'): ${moment('2019-05-21 11:00:00').format('YYYY-MM-DD HH:mm:SS')}, moment('2019-05-21 13:00:00): ${moment('2019-05-21 13:00:00')}`);
 		// 모든 TODO 항목들 가져오기
 		axiosInstance.post('/get/all', { userid: this.userid })
 			.then((todos) => {
 				const todoListRes: ITodoListResponse = todos.data;
 				// Store에 TODO 항목들 저장
-				// setTimeout(() => {
-				// 	this.setTodoList(todoListRes.todoList);
-				// 	log('fetchAllTodos end, cnt: ', this.count);
-				// }, 3000);
 				this.pendingReqCount--;
-				log(`fetchAllTodos end, cnt: ${this.count}, pendingReqCount: ${this.pendingReqCount}`);
 				if (this.pendingReqCount === 0) {
 					this.setTodoList(todoListRes.todoList)
 				}
@@ -154,8 +143,6 @@ export class TodoStore implements ITodoStore {
 				log('createNewTodo error: ', error);
 			});
 	}
-
-	editedDeadline = false;
 
 	@action
 	editTodo = (todoItem: ITodoItem, deadlineEdited: boolean) => {

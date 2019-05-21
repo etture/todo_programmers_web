@@ -26,7 +26,7 @@ class TodoPage extends Component<ITodoPageProps, ITodoPageState> {
 		return (
 			<div className="container mt-3">
 				<div className="container d-flex flex-row justify-content-between">
-					<h3><span className="badge badge-secondary py-2">Todo (user: {this.props.todoStore!.nickname})</span></h3>
+					<h3><span className="badge badge-secondary py-2">TODO (user: {this.props.todoStore!.nickname})</span></h3>
 					<button className="btn btn-outline-primary btn-md"
 						onClick={() => this.signout()}
 					>로그아웃</button>
