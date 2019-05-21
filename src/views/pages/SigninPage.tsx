@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { axiosInstance } from '../../utils/axiosSettings';
+import { axiosInstance } from '../../utils/axiosConfig';
 import log from '../../utils/devLog';
 import { inject, observer } from 'mobx-react';
 import { ITodoStore } from '../../stores/TodoStore';

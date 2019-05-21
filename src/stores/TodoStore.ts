@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { axiosInstance } from '../utils/axiosSettings';
+import { axiosInstance } from '../utils/axiosConfig';
 import log from '../utils/devLog';
 import { ITodoItem, ITodoListResponse, IPreDBTodoItem } from '../utils/definitions';
 import moment from 'moment';
