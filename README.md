@@ -4,7 +4,7 @@
 ## 실행 URL: https://todo-programmers-web.firebaseapp.com
 
 ### 개발 스택
-- React.js
+- React.js, MobX
 - TypeScript
 - Firebase Hosting (배포)
 
