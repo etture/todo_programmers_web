@@ -50,7 +50,7 @@ class SigninPage extends Component<ISigninPageProps, ISigninPageState> {
 				} else {
 					if (result.data.target === 'nickname') {
 						this.setState({ nicknameError: true, passwordError: false });
-					} else if (result.data.target == 'password') {
+					} else if (result.data.target === 'password') {
 						this.setState({ passwordError: true, nicknameError: false });
 					} else {
 						this.setState({ nicknameError: true, passwordError: true });

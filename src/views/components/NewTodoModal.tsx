@@ -99,7 +99,8 @@ class NewTodoModal extends Component<INewTodoModalProps, INewTodoModalState> {
 
 	handleDeadline = (datetime: Moment | string) => {
 		const deadline = moment(datetime.valueOf());
-		log('deadline: ', datetime.toString(), deadline.month(), deadline.date(), deadline.toISOString());
+		deadline.add(9, "hours");
+		log('handleDeadline: ', deadline.month(), deadline.date(), deadline.toISOString());
 		this.setState({ deadline: deadline.toISOString() });
 	}
 

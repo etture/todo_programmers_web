@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import TodoList from '../components/TodoList';
 import { inject, observer } from 'mobx-react';
 import { ITodoStore } from '../../stores/TodoStore';
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps } from 'react-router-dom'
 
 interface ITodoPageProps extends RouteComponentProps<{}> {
 	todoStore?: ITodoStore

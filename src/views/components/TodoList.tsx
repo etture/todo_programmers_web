@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { observable, action } from 'mobx';
 import arraySort from 'array-sort';
 import moment from 'moment';
 import { ITodoStore } from '../../stores/TodoStore';
-import { ITodoItem } from '../../utils/definitions';
 import TodoListItem from './TodoIListItem';
 import log from '../../utils/devLog';
 import './TodoList.css';

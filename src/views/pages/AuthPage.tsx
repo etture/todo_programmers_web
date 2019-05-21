@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { axiosInstance } from '../../utils/axiosSettings';
-import log from '../../utils/devLog';
 import { inject, observer } from 'mobx-react';
 import { ITodoStore } from '../../stores/TodoStore';
 import { withRouter, RouteComponentProps, Switch, Route } from 'react-router-dom';

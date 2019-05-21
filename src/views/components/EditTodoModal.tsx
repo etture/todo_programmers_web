@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { ITodoStore } from '../../stores/TodoStore';
 import { IStateStore } from '../../stores/StateStore';
-import { ITodoItem, IPreDBTodoItem } from '../../utils/definitions';
+import { ITodoItem } from '../../utils/definitions';
 import log from '../../utils/devLog';
 import Datetime from 'react-datetime';
 import moment, { Moment } from 'moment';

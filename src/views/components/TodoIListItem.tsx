@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { axiosInstance } from '../../utils/axiosSettings';
 import { ITodoStore } from '../../stores/TodoStore';
-import { ITodoItem, ITodoListResponse } from '../../utils/definitions';
+import { ITodoItem } from '../../utils/definitions';
 import { IoMdCheckmark } from 'react-icons/io';
 import moment from 'moment';
 import _ from 'lodash';
 import './TodoListItem.css';
-import EditTodoModal from './EditTodoModal';
 import log from '../../utils/devLog';
 import { IStateStore } from '../../stores/StateStore';
 
@@ -132,7 +130,7 @@ class TodoListItem extends Component<ITodoListItemProps, ITodoListItemState> {
 	render() {
 		const { todoItem } = this.props;
 		log('todoItem.createdAt:, ', todoItem.createdAt);
-		const createdAt = moment(todoItem.createdAt);
+		const createdAt = moment(todoItem.createdAt).add(9, 'hours');
 		return (
 			<div className="container" >
 				<div className="d-flex flex-row justify-content-between">
