@@ -46,6 +46,7 @@ class SignupPage extends Component<ISignupPageProps, ISignupPageState> {
 				if (result.data.success) {
 					this.props.todoStore!.setUser(result.data.userId, result.data.nickname);
 					localStorage.setItem('todo_userid', result.data.userId);
+					localStorage.setItem('todo_nickname', result.data.nickname);
 					this.props.history.push('/todo');
 				} else {
 					if (result.data.target === 'nickname') {
