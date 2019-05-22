@@ -24,7 +24,7 @@ class TodoPage extends Component<ITodoPageProps, ITodoPageState> {
 
 	render() {
 		return (
-			<div className="container mt-3">
+			<div className="container mt-3 col-9">
 				<div className="container d-flex flex-row justify-content-between">
 					<h3><span className="badge badge-secondary py-2">TODO (user: {this.props.todoStore!.nickname})</span></h3>
 					<button className="btn btn-outline-primary btn-md"
