@@ -46,12 +46,6 @@ export class TodoStore implements ITodoStore {
 	pendingReqCount = 0;
 
 	@action
-	setTodoList = (list: ITodoItem[]) => {
-		this.todoList = list;
-		log('TodoStore setTodoList, todoList: ', JSON.stringify(this.todoList));
-	}
-
-	@action
 	fetchAllTodos = () => {
 		log(`moment().format(): ${moment().format()}, moment().format('YYYY-MM-DD HH:mm:SS'): ${moment().format('YYYY-MM-DD HH:mm:SS')}`);
 		// 모든 TODO 항목들 가져오기
@@ -67,20 +61,19 @@ export class TodoStore implements ITodoStore {
 	}
 
 	@action
-	fetchAllTodosInternal = () => {
-		// 모든 TODO 항목들 가져오기
-		axiosInstance.post('/get/all', { userid: this.userid })
-			.then((todos) => {
-				const todoListRes: ITodoListResponse = todos.data;
-				// Store에 TODO 항목들 저장
-				this.pendingReqCount--;
-				if (this.pendingReqCount === 0) {
-					this.setTodoList(todoListRes.todoList)
-				}
-			})
-			.catch(error => {
-				log('fetchAllTodos error: ', error);
-			});
+	setTodoList = (list: ITodoItem[]) => {
+		this.todoList = list;
+		log('TodoStore setTodoList, todoList: ', JSON.stringify(this.todoList));
+	}
+
+	@action
+	updateTodosFromServer = (todoListRes: ITodoListResponse) => {
+		this.pendingReqCount--;
+		if (todoListRes.success) {
+			if (this.pendingReqCount === 0) {
+				this.setTodoList(todoListRes.todoList)
+			}
+		}
 	}
 
 	@action
@@ -92,8 +85,10 @@ export class TodoStore implements ITodoStore {
 
 		// Delete from server
 		axiosInstance.delete('/delete', { data: { id: todoId, userid: this.userid } })
-			.then(() => {
-				this.fetchAllTodosInternal();
+			.then((result) => {
+				// Update todo from server
+				const todoListRes: ITodoListResponse = result.data;
+				this.updateTodosFromServer(todoListRes);
 			})
 			.catch(error => {
 				log('deleteTodo error: ', error);
@@ -115,8 +110,12 @@ export class TodoStore implements ITodoStore {
 		// Complete todo on server
 		const newTodoItem = { ...todoItem, completed };
 		axiosInstance.put('/edit/completed', newTodoItem)
-			.then(() => {
-				this.fetchAllTodosInternal();
+			.then((result) => {
+				log(`completeTodo() -> result: ${JSON.stringify(result)}, result.data.success: ${result.data.success}, result.data.todoList: ${result.data.todoList}`);
+				
+				// Update todo from server
+				const todoListRes: ITodoListResponse = result.data;
+				this.updateTodosFromServer(todoListRes);
 			})
 			.catch(error => {
 				log('completeTodo error: ', error);
@@ -136,8 +135,10 @@ export class TodoStore implements ITodoStore {
 
 		// Add on server
 		axiosInstance.post('/new', preDBTodoItem)
-			.then(() => {
-				this.fetchAllTodosInternal();
+			.then((result) => {
+				// Update todo from server
+				const todoListRes: ITodoListResponse = result.data;
+				this.updateTodosFromServer(todoListRes);
 			})
 			.catch(error => {
 				log('createNewTodo error: ', error);
@@ -166,8 +167,10 @@ export class TodoStore implements ITodoStore {
 
 		// Edit on server
 		axiosInstance.put('/edit/content', todoItem)
-			.then(() => {
-				this.fetchAllTodosInternal();
+			.then((result) => {
+				// Update todo from server
+				const todoListRes: ITodoListResponse = result.data;
+				this.updateTodosFromServer(todoListRes);
 			})
 			.catch(error => {
 				log('editTodo error: ', error);
